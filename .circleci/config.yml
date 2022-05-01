@@ -7,6 +7,6 @@ workflows:
   develop:
     jobs:
       - heroku/deploy-via-git:
-          api-key: '396ce2c2-da25-43d7-82d3-6741b822af61'
-          app-name: actedu-activities-api-default
+          api-key: HEROKU_API_KEY
+          app-name: $HEROKU_APP_NAME
           branch: develop
