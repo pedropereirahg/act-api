@@ -1,0 +1,12 @@
+version: 2.1
+
+orbs:
+  heroku: circleci/heroku@1.2.6
+
+workflows:
+  develop:
+    jobs:
+      - heroku/deploy-via-git:
+          api-key: '396ce2c2-da25-43d7-82d3-6741b822af61'
+          app-name: actedu-activities-api-default
+          branch: develop
