@@ -1,0 +1,111 @@
+{
+  "name": "act-api",
+  "version": "0.0.1",
+  "description": "Activities API",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "private": true,
+  "author": "Pedro Pereira <pedropereirahg@gmail.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.com:actedu/act-api.git"
+  },
+  "keywords": [
+    "nodejs",
+    "nestjs",
+    "microservice",
+    "typescript",
+    "activities",
+    "api"
+  ],
+  "engines": {
+    "node": ">= 14.16.1",
+    "yarn": ">= 1.22.5"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prepare": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
+  },
+  "dependencies": {
+    "@nestjs/common": "^8.0.6",
+    "@nestjs/core": "^8.0.6",
+    "@nestjs/mongoose": "^8.0.1",
+    "@nestjs/platform-fastify": "^8.0.6",
+    "@nestjs/swagger": "^5.2.1",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "fastify": "^3.20.1",
+    "fastify-compress": "^3.6.0",
+    "fastify-helmet": "^5.3.2",
+    "fastify-swagger": "^5.2.0",
+    "mongoose": "^5.13.7",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^7.3.0",
+    "uuid": "^8.3.2",
+    "winston": "^3.7.2"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^8.1.1",
+    "@nestjs/schematics": "^8.0.2",
+    "@nestjs/testing": "^8.0.6",
+    "@types/cors": "^2.8.12",
+    "@types/dotenv": "^8.2.0",
+    "@types/jest": "27.4.1",
+    "@types/node": "^16.6.1",
+    "@types/supertest": "^2.0.11",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.1",
+    "jest": "^27.2.5",
+    "prettier": "^2.3.2",
+    "source-map-support": "^0.5.20",
+    "supertest": "^6.1.5",
+    "ts-jest": "^27.0.4",
+    "ts-loader": "^9.2.5",
+    "ts-node": "^10.2.0",
+    "tsconfig-paths": "^3.10.1",
+    "typescript": "^4.3.5"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    }
+  }
+}
