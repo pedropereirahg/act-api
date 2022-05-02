@@ -23,7 +23,6 @@ workflows:
                 - /^release.*/
           api-key: HEROKU_API_KEY
           app-name: actedu-act-api-hml
-          branch: /^release.*/
   heroku-deploy:
     jobs:
       - heroku/deploy-via-git:
