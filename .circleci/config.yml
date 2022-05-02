@@ -4,13 +4,15 @@ orbs:
   heroku: circleci/heroku@1.2.6
 
 workflows:
-  dev-heroku-deploy:
+  hml-heroku-deploy:
     jobs:
       - heroku/deploy-via-git:
-          context: develop
-          pre-deploy:
-            - run: echo "DATABASE_URI=$DATABASE_URI" >> .env
-            - run: cat .env
           api-key: HEROKU_API_KEY
-          app-name: $HEROKU_APP_NAME
-          branch: develop
+          app-name: actedu-act-api-hml
+          branch: release*
+  heroku-deploy:
+    jobs:
+      - heroku/deploy-via-git:
+          api-key: HEROKU_API_KEY
+          app-name: actedu-act-api
+          branch: main
