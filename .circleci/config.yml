@@ -7,12 +7,20 @@ workflows:
   hml-heroku-deploy:
     jobs:
       - heroku/deploy-via-git:
+          filters:
+            branches:
+              only:
+                - develop
           api-key: HEROKU_API_KEY
           app-name: actedu-act-api-hml
           branch: develop
   heroku-deploy:
     jobs:
       - heroku/deploy-via-git:
+          filters:
+            branches:
+              only:
+                - develop
           api-key: HEROKU_API_KEY
           app-name: actedu-act-api
           branch: main
