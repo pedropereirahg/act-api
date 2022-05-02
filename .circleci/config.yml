@@ -27,8 +27,7 @@ workflows:
       - heroku/deploy-via-git:
           filters:
             branches:
-              only:
-                - main
+              ignore: /.*/
             tags:
               only: /^v[0-9]+(\.[0-9]+)*$/
           api-key: HEROKU_API_KEY
