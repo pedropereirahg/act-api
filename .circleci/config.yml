@@ -3,10 +3,30 @@ version: 2.1
 orbs:
   heroku: circleci/heroku@1.2.6
 
+executors:
+  docker-executor:
+    docker:
+      - image: cimg/base:stable
+        auth:
+          username: $DOCKER_HUB_USER
+          password: $DOCKER_HUB_PASSWORD
+jobs:
+  prepare:
+    executor: docker-executor
+    steps:
+      - checkout
+      - run: echo "$DATABASE_URI"
+      - run: cat .env
+
 workflows:
-  develop:
+  preparing-env:
+    jobs:
+      - prepare:
+          context: develop
+  dev-heroku-deploy:
     jobs:
       - heroku/deploy-via-git:
+          context: develop
           api-key: HEROKU_API_KEY
           app-name: $HEROKU_APP_NAME
           branch: develop
