@@ -74,11 +74,9 @@ const bootstrap = async (): Promise<void> => {
 
   SwaggerModule.setup(Env.SWAGGER_DOCS, app, swaggerDocument);
 
-  const port = parseInt(Env.APPLICATION_PORT.toString(), 10);
-
   await app
-    .listen(port, '0.0.0.0')
-    .then(() => Logger.log(`API Listen on ${port}`))
+    .listen(Env.APPLICATION_PORT, '0.0.0.0')
+    .then(() => Logger.log(`API Listen on ${Env.APPLICATION_PORT}`))
     .catch((error: any) => Logger.error(error.message));
 };
 
