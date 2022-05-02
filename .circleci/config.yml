@@ -13,7 +13,6 @@ workflows:
                 - develop
           api-key: HEROKU_API_KEY
           app-name: actedu-act-api-dev
-          branch: develop
   hml-heroku-deploy:
     jobs:
       - heroku/deploy-via-git:
@@ -30,6 +29,7 @@ workflows:
             branches:
               only:
                 - main
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*$/
           api-key: HEROKU_API_KEY
           app-name: actedu-act-api
-          branch: main
