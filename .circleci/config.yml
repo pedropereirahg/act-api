@@ -20,7 +20,7 @@ workflows:
           filters:
             branches:
               only:
-                - develop
+                - main
           api-key: HEROKU_API_KEY
           app-name: actedu-act-api
           branch: main
