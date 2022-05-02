@@ -24,6 +24,8 @@ workflows:
       - preparing-environment:
           context: develop
       - heroku/deploy-via-git:
+          pre-deploy:
+            - run: cat .env
           context: develop
           api-key: HEROKU_API_KEY
           app-name: $HEROKU_APP_NAME
