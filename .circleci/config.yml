@@ -12,7 +12,7 @@ workflows:
               only:
                 - develop
           api-key: HEROKU_API_KEY
-          app-name: actedu-act-api-hml
+          app-name: actedu-act-api-dev
           branch: develop
   hml-heroku-deploy:
     jobs:
