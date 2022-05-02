@@ -11,20 +11,18 @@ executors:
           username: $DOCKER_HUB_USER
           password: $DOCKER_HUB_PASSWORD
 jobs:
-  prepare:
+  preparing-environment:
     executor: docker-executor
     steps:
       - checkout
-      - run: echo "$DATABASE_URI"
+      - run: echo "DATABASE_URI=$DATABASE_URI" >> .env
       - run: cat .env
 
 workflows:
-  preparing-env:
-    jobs:
-      - prepare:
-          context: develop
   dev-heroku-deploy:
     jobs:
+      - preparing-environment:
+          context: develop
       - heroku/deploy-via-git:
           context: develop
           api-key: HEROKU_API_KEY
