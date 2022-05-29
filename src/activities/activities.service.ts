@@ -28,21 +28,21 @@ export class ActivitiesService {
     if (type === ActivityTypesEnum.essay && options.length) {
       throw new HttpException(
         'Essay activity must not have statements.',
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
     if (type === ActivityTypesEnum.multipleChoice && options.length < 2) {
       throw new HttpException(
         'Multiple-choice activity must have more than 2 statements.',
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
     if (type === ActivityTypesEnum.singleChoice && options.length < 2) {
       throw new HttpException(
         'Single-choice activity must have more than 2 statements.',
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -56,7 +56,7 @@ export class ActivitiesService {
     if (type !== ActivityTypesEnum.essay && count < 1) {
       throw new HttpException(
         'An activity must have at least 1 correct answer.',
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
