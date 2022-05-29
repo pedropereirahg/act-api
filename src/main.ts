@@ -57,7 +57,7 @@ const bootstrap = async (): Promise<void> => {
     .setTitle(Env.SWAGGER_TITLE)
     .setDescription(Env.SWAGGER_DESCRIPTION)
     .setVersion(Env.APPLICATION_VERSION)
-    .setContact('ActEdu', 'http://www.actedu.com.br', 'contato@actedu.com.br')
+    .setContact('ActEdu', 'http://www.actedu.com.br', 'contato@actedu.com.br');
 
   Env.SWAGGER_SERVER.map((swaggerServer) =>
     swaggerDocumentBuilder.addServer(swaggerServer),

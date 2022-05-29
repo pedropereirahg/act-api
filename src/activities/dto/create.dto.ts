@@ -1,6 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsBoolean, ValidateNested, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsBoolean,
+  ValidateNested,
+  IsString,
+} from 'class-validator';
 
 import { Activity } from '../interfaces/activity.interface';
 import { ActivityTypesEnum } from '../schemas/activities.schema';

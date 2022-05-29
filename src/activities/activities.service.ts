@@ -15,7 +15,7 @@ export class ActivitiesService {
   constructor(
     @InjectModel(ActivitiesEntity.name)
     private activitiesModel: Model<ActivitiesDocument>,
-  ) { }
+  ) {}
 
   async create(data: Partial<Activity>): Promise<Activity> {
     const dataToSave = new this.activitiesModel({
@@ -32,14 +32,20 @@ export class ActivitiesService {
       );
     }
 
-    if (type === ActivityTypesEnum.multipleChoice && options?.length < 2) {
+    if (
+      type === ActivityTypesEnum.multipleChoice &&
+      (!options || options.length < 2)
+    ) {
       throw new HttpException(
         'Multiple-choice activity must have more than 2 statements.',
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    if (type === ActivityTypesEnum.singleChoice && options?.length < 2) {
+    if (
+      type === ActivityTypesEnum.singleChoice &&
+      (!options || options.length < 2)
+    ) {
       throw new HttpException(
         'Single-choice activity must have more than 2 statements.',
         HttpStatus.BAD_REQUEST,
