@@ -59,9 +59,17 @@ export class ActivitiesService {
           count++;
         }
       }
+
       if (count < 1) {
         throw new HttpException(
           'An activity must have at least 1 correct answer.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      if (type === ActivityTypesEnum.singleChoice && count > 1) {
+        throw new HttpException(
+          'This type of activity must have 1 correct answer.',
           HttpStatus.BAD_REQUEST,
         );
       }
