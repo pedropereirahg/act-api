@@ -1,8 +1,19 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsBoolean } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, IsOptional, IsBoolean, ValidateNested, IsString } from 'class-validator';
 
 import { Activity } from '../interfaces/activity.interface';
 import { ActivityTypesEnum } from '../schemas/activities.schema';
+
+export class ActivityOptionsDto {
+  @IsString()
+  @IsNotEmpty()
+  statement: string;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  isCorrect: boolean;
+}
 
 export class CreateDto implements Partial<Activity> {
   @ApiPropertyOptional({
@@ -11,6 +22,7 @@ export class CreateDto implements Partial<Activity> {
     example: 'Lorem ipsum',
     required: false,
   })
+  @IsString()
   @IsOptional()
   title?: string;
 
@@ -21,6 +33,7 @@ export class CreateDto implements Partial<Activity> {
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     required: false,
   })
+  @IsString()
   @IsOptional()
   description?: string;
 
@@ -31,17 +44,20 @@ export class CreateDto implements Partial<Activity> {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     required: true,
   })
+  @IsString()
   @IsNotEmpty()
   statement?: string;
 
   @ApiProperty({
     description: 'Options of resource',
-    type: Array,
+    type: ActivityOptionsDto,
     example: [],
     required: false,
   })
   @IsOptional()
-  options?: Array<Record<string, any>>;
+  @ValidateNested({ each: true })
+  @Type(() => ActivityOptionsDto)
+  options?: ActivityOptionsDto[];
 
   @ApiPropertyOptional({
     description: 'Type of resource',
@@ -50,6 +66,7 @@ export class CreateDto implements Partial<Activity> {
     default: ActivityTypesEnum.essay,
     required: true,
   })
+  @IsString()
   @IsNotEmpty()
   type?: ActivityTypesEnum;
 

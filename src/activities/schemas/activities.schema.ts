@@ -12,6 +12,7 @@ export class Options {
 
   isCorrect: boolean;
 }
+
 @Schema({ collection: 'activities', timestamps: true })
 export class ActivitiesEntity extends Document implements Activity {
   @Prop({ type: String, required: true })
