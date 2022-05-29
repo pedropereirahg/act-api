@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { ActivityTypesEnum } from '../schemas/activities.schema';
 
 import { CreateDto } from './create.dto';
@@ -12,8 +12,9 @@ export class UpdateDto extends CreateDto {
       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     required: false,
   })
+  @IsString()
   @IsOptional()
-  statement?: string;
+  statement: string;
 
   @ApiPropertyOptional({
     description: 'Type of resource',
@@ -22,6 +23,7 @@ export class UpdateDto extends CreateDto {
     default: ActivityTypesEnum.essay,
     required: false,
   })
+  @IsString()
   @IsOptional()
-  type?: ActivityTypesEnum;
+  type: ActivityTypesEnum;
 }
