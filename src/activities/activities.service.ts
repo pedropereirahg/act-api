@@ -15,7 +15,7 @@ export class ActivitiesService {
   constructor(
     @InjectModel(ActivitiesEntity.name)
     private activitiesModel: Model<ActivitiesDocument>,
-  ) {}
+  ) { }
 
   async create(data: Partial<Activity>): Promise<Activity> {
     const dataToSave = new this.activitiesModel({
@@ -25,39 +25,40 @@ export class ActivitiesService {
 
     const { type, options } = dataToSave;
 
-    if (type === ActivityTypesEnum.essay && options.length) {
+    if (type === ActivityTypesEnum.essay && options?.length) {
       throw new HttpException(
         'Essay activity must not have statements.',
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    if (type === ActivityTypesEnum.multipleChoice && options.length < 2) {
+    if (type === ActivityTypesEnum.multipleChoice && options?.length < 2) {
       throw new HttpException(
         'Multiple-choice activity must have more than 2 statements.',
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    if (type === ActivityTypesEnum.singleChoice && options.length < 2) {
+    if (type === ActivityTypesEnum.singleChoice && options?.length < 2) {
       throw new HttpException(
         'Single-choice activity must have more than 2 statements.',
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    let count = 0;
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].isCorrect === true) {
-        count++;
+    if (type !== ActivityTypesEnum.essay) {
+      let count = 0;
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].isCorrect === true) {
+          count++;
+        }
       }
-    }
-
-    if (type !== ActivityTypesEnum.essay && count < 1) {
-      throw new HttpException(
-        'An activity must have at least 1 correct answer.',
-        HttpStatus.BAD_REQUEST,
-      );
+      if (count < 1) {
+        throw new HttpException(
+          'An activity must have at least 1 correct answer.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
     }
 
     const dataSaved = await dataToSave.save();
