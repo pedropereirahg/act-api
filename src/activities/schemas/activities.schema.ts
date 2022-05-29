@@ -7,7 +7,11 @@ export enum ActivityTypesEnum {
   multipleChoice = 'multiple-choice',
   singleChoice = 'single-choice',
 }
+export class Options {
+  statement: string;
 
+  isCorrect: boolean;
+}
 @Schema({ collection: 'activities', timestamps: true })
 export class ActivitiesEntity extends Document implements Activity {
   @Prop({ type: String, required: true })
@@ -23,7 +27,7 @@ export class ActivitiesEntity extends Document implements Activity {
   statement: string;
 
   @Prop({ type: Array, required: false })
-  options?: Array<Record<string, any>>;
+  options?: Options[];
 
   @Prop({
     type: ActivityTypesEnum,
