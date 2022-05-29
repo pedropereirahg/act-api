@@ -6,16 +6,31 @@ import {
   IsBoolean,
   ValidateNested,
   IsString,
+  IsEnum,
 } from 'class-validator';
 
 import { Activity } from '../interfaces/activity.interface';
 import { ActivityTypesEnum } from '../schemas/activities.schema';
 
 export class ActivityOptionsDto {
+  @ApiProperty({
+    description: 'Statement of option',
+    type: String,
+    example:
+      'Excepteur sint occaecat cupidatat non proident',
+    required: true,
+  })
   @IsString()
   @IsNotEmpty()
   statement: string;
 
+  @ApiProperty({
+    description: 'Defines whether the option is correct or not',
+    type: Boolean,
+    example: true,
+    default: false,
+    required: true,
+  })
   @IsBoolean()
   @IsNotEmpty()
   isCorrect: boolean;
@@ -52,9 +67,9 @@ export class CreateDto implements Partial<Activity> {
   })
   @IsString()
   @IsNotEmpty()
-  statement?: string;
+  statement: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Options of resource',
     type: ActivityOptionsDto,
     example: [],
@@ -65,16 +80,17 @@ export class CreateDto implements Partial<Activity> {
   @Type(() => ActivityOptionsDto)
   options?: ActivityOptionsDto[];
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Type of resource',
     type: String,
     example: ActivityTypesEnum.essay,
     default: ActivityTypesEnum.essay,
     required: true,
   })
+  @IsEnum(ActivityTypesEnum, { each: true })
   @IsString()
   @IsNotEmpty()
-  type?: ActivityTypesEnum;
+  type: ActivityTypesEnum;
 
   @ApiPropertyOptional({
     description: 'Defines whether the resource is active or not',
