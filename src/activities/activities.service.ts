@@ -6,6 +6,7 @@ import { v4 as uuidV4 } from 'uuid';
 import {
   ActivitiesDocument,
   ActivitiesEntity,
+  ActivityTypesEnum,
 } from './schemas/activities.schema';
 import { Activity } from './interfaces/activity.interface';
 
@@ -21,6 +22,44 @@ export class ActivitiesService {
       id: uuidV4(),
       ...data,
     });
+
+    const { type, options } = dataToSave;
+
+    if (type === ActivityTypesEnum.essay && options.length) {
+      throw new HttpException(
+        'Essay activity must not have statements.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (type === ActivityTypesEnum.multipleChoice && options.length < 2) {
+      throw new HttpException(
+        'Multiple-choice activity must have more than 2 statements.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (type === ActivityTypesEnum.singleChoice && options.length < 2) {
+      throw new HttpException(
+        'Single-choice activity must have more than 2 statements.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    let count = 0;
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].isCorrect === true) {
+        count++;
+      }
+    }
+
+    if (type !== ActivityTypesEnum.essay && count < 1) {
+      throw new HttpException(
+        'An activity must have at least 1 correct answer.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     const dataSaved = await dataToSave.save();
     return dataSaved.toJSON();
   }
@@ -65,7 +104,7 @@ export class ActivitiesService {
     return data;
   }
 
-  async update(id: string, data: Partial<Activity>): Promise<Activity> {
+  async update(id: string, data: any): Promise<Activity> {
     if (!(await this.activitiesModel.findOne({ id }).lean())) {
       throw new HttpException('Activity not found.', HttpStatus.NOT_FOUND);
     }
