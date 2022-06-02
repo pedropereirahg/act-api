@@ -54,7 +54,6 @@ export class ActivitiesController {
       orderBy = 'createdAt',
       orderDirection = 'asc',
       search,
-      active,
     } = filterPaginateDto;
 
     const pageNumber = Number(page);
@@ -66,7 +65,6 @@ export class ActivitiesController {
       orderBy,
       orderDirection,
       search,
-      active,
     });
 
     return new GetPaginateDto(resultQuery, count, pageNumber, pageSize);

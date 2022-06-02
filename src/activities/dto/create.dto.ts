@@ -16,8 +16,7 @@ export class ActivityOptionsDto {
   @ApiProperty({
     description: 'Statement of option',
     type: String,
-    example:
-      'Excepteur sint occaecat cupidatat non proident',
+    example: 'Excepteur sint occaecat cupidatat non proident',
     required: true,
   })
   @IsString()

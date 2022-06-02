@@ -85,16 +85,13 @@ export class ActivitiesService {
     orderBy,
     orderDirection,
     search,
-    active,
   }): Promise<[Activity[], number]> {
-    const filter: Record<string, any> = {};
+    const filter: Record<string, any> = {
+      active: true
+    };
 
     if (search) {
-      filter.search = { $regex: `*${search}.*`, $options: 'i' };
-    }
-
-    if (active) {
-      filter.active = active;
+      filter.$text = { $search: search, $caseSensitive: false };
     }
 
     const sortBy = { [orderBy]: orderDirection === 'asc' ? 1 : -1 };
