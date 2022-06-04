@@ -42,7 +42,7 @@ const bootstrap = async (): Promise<void> => {
   );
 
   app.enableCors({
-    origin: false,
+    origin: Env.SWAGGER_SERVER,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     preflightContinue: false,
     optionsSuccessStatus: 200,
@@ -57,9 +57,11 @@ const bootstrap = async (): Promise<void> => {
     .setTitle(Env.SWAGGER_TITLE)
     .setDescription(Env.SWAGGER_DESCRIPTION)
     .setVersion(Env.APPLICATION_VERSION)
-    .addServer(Env.SWAGGER_SERVER)
-    .setContact('ActEdu', 'http://www.actedu.com.br', 'contato@actedu.com.br')
-    .build();
+    .setContact('ActEdu', 'http://www.actedu.com.br', 'contato@actedu.com.br');
+
+  Env.SWAGGER_SERVER.map((swaggerServer) =>
+    swaggerDocumentBuilder.addServer(swaggerServer),
+  );
 
   const swaggerDocumentOptions: SwaggerDocumentOptions = {
     operationIdFactory: (_controllerKey: string, methodKey: string) =>
@@ -68,7 +70,7 @@ const bootstrap = async (): Promise<void> => {
 
   const swaggerDocument = SwaggerModule.createDocument(
     app,
-    swaggerDocumentBuilder,
+    swaggerDocumentBuilder.build(),
     swaggerDocumentOptions,
   );
 
