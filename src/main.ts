@@ -42,7 +42,7 @@ const bootstrap = async (): Promise<void> => {
   );
 
   app.enableCors({
-    origin: Env.SWAGGER_SERVER,
+    origin: Env.ALLOWED_ORIGINS,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     preflightContinue: false,
     optionsSuccessStatus: 200,

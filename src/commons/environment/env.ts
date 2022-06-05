@@ -12,6 +12,12 @@ export abstract class Env {
   public static readonly APPLICATION_VERSION: string =
     process.env.APPLICATION_VERSION;
 
+  public static readonly ALLOWED_ORIGINS: string[] =
+    process.env.ALLOWED_ORIGINS &&
+    Array.isArray(process.env.ALLOWED_ORIGINS.split(','))
+      ? process.env.ALLOWED_ORIGINS.split(',')
+      : [];
+
   public static readonly SWAGGER_TITLE: string = process.env.SWAGGER_TITLE;
 
   public static readonly SWAGGER_DESCRIPTION: string =
