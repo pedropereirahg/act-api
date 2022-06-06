@@ -6,6 +6,7 @@ import { v4 as uuidV4 } from 'uuid';
 import {
   ActivitiesDocument,
   ActivitiesEntity,
+  ActivityTypesEnum,
 } from './schemas/activities.schema';
 import { Activity } from './interfaces/activity.interface';
 
@@ -21,6 +22,59 @@ export class ActivitiesService {
       id: uuidV4(),
       ...data,
     });
+
+    const { type, options } = dataToSave;
+
+    if (type === ActivityTypesEnum.essay && options?.length) {
+      throw new HttpException(
+        'Essay activity must not have statements.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (
+      type === ActivityTypesEnum.multipleChoice &&
+      (!options || options.length < 2)
+    ) {
+      throw new HttpException(
+        'Multiple-choice activity must have more than 2 statements.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (
+      type === ActivityTypesEnum.singleChoice &&
+      (!options || options.length < 2)
+    ) {
+      throw new HttpException(
+        'Single-choice activity must have more than 2 statements.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (type !== ActivityTypesEnum.essay) {
+      let count = 0;
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].isCorrect === true) {
+          count++;
+        }
+      }
+
+      if (count < 1) {
+        throw new HttpException(
+          'An activity must have at least 1 correct answer.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      if (type === ActivityTypesEnum.singleChoice && count > 1) {
+        throw new HttpException(
+          'This type of activity must have 1 correct answer.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
+
     const dataSaved = await dataToSave.save();
     return dataSaved.toJSON();
   }
@@ -31,16 +85,13 @@ export class ActivitiesService {
     orderBy,
     orderDirection,
     search,
-    active,
   }): Promise<[Activity[], number]> {
-    const filter: Record<string, any> = {};
+    const filter: Record<string, any> = {
+      active: true,
+    };
 
     if (search) {
-      filter.search = { $regex: `*${search}.*`, $options: 'i' };
-    }
-
-    if (active) {
-      filter.active = active;
+      filter.$text = { $search: search, $caseSensitive: false };
     }
 
     const sortBy = { [orderBy]: orderDirection === 'asc' ? 1 : -1 };
@@ -65,7 +116,7 @@ export class ActivitiesService {
     return data;
   }
 
-  async update(id: string, data: Partial<Activity>): Promise<Activity> {
+  async update(id: string, data: any): Promise<Activity> {
     if (!(await this.activitiesModel.findOne({ id }).lean())) {
       throw new HttpException('Activity not found.', HttpStatus.NOT_FOUND);
     }

@@ -11,12 +11,4 @@ export class FilterPaginateDto extends RequestPaginateDto {
   })
   @IsOptional()
   search?: string;
-
-  @ApiProperty({
-    description: 'Filter for resources active or inactive',
-    type: Boolean,
-    required: false,
-  })
-  @IsOptional()
-  active?: boolean;
 }
