@@ -87,7 +87,7 @@ export class ActivitiesService {
     search,
   }): Promise<[Activity[], number]> {
     const filter: Record<string, any> = {
-      active: true
+      active: true,
     };
 
     if (search) {
