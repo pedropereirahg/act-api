@@ -1,11 +1,9 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Post,
-  Patch,
   Query,
   Req,
   ValidationPipe,
@@ -21,7 +19,6 @@ import { CreateDto } from './dto/create.dto';
 import { FilterPaginateDto } from './dto/filter-paginate.dto';
 import { GetDto } from './dto/get.dto';
 import { GetPaginateDto } from './dto/get-paginate.dto';
-import { UpdateDto } from './dto/update.dto';
 import { ActivitiesService } from './activities.service';
 
 @Controller('activities')
@@ -76,25 +73,25 @@ export class ActivitiesController {
     return GetDto.factory(await this.activitiesService.findOne(id)) as GetDto;
   }
 
-  @Patch(':id')
-  @ApiOkResponse({ type: GetDto })
-  async update(
-    @Param('id') id: string,
-    @Body() data: UpdateDto,
-    @Req() req: any,
-  ): Promise<GetDto> {
-    try {
-      const dataUpdated = await this.activitiesService.update(id, data);
-      req.logger.log(`Activity id: ${dataUpdated.id} updated`);
-      return GetDto.factory(dataUpdated) as GetDto;
-    } catch (error) {
-      req.logger.error(error);
-      throw error;
-    }
-  }
+  // @Patch(':id')
+  // @ApiOkResponse({ type: GetDto })
+  // async update(
+  //   @Param('id') id: string,
+  //   @Body() data: UpdateDto,
+  //   @Req() req: any,
+  // ): Promise<GetDto> {
+  //   try {
+  //     const dataUpdated = await this.activitiesService.update(id, data);
+  //     req.logger.log(`Activity id: ${dataUpdated.id} updated`);
+  //     return GetDto.factory(dataUpdated) as GetDto;
+  //   } catch (error) {
+  //     req.logger.error(error);
+  //     throw error;
+  //   }
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.activitiesService.remove(id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string): Promise<void> {
+  //   return this.activitiesService.remove(id);
+  // }
 }
