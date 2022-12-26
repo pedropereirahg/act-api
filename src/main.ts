@@ -29,7 +29,7 @@ const bootstrap = async (): Promise<void> => {
       maxParamLength: 1000,
       bodyLimit: 12485760, // 10MB
     }),
-    { logger }
+    { logger },
   );
 
   app.enableCors({
@@ -55,7 +55,11 @@ const bootstrap = async (): Promise<void> => {
     .setTitle(Env.SWAGGER_TITLE)
     .setDescription(Env.SWAGGER_DESCRIPTION)
     .setVersion(Env.APPLICATION_VERSION)
-    .setContact('Atividade Escolar', 'https://www.atividadeescolar.com.br/', 'pedropereirahg@gmail.com');
+    .setContact(
+      'Atividade Escolar',
+      'https://www.atividadeescolar.com.br/',
+      'pedropereirahg@gmail.com',
+    );
 
   Env.SWAGGER_SERVER.map((swaggerServer) =>
     swaggerDocumentBuilder.addServer(swaggerServer),

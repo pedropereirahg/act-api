@@ -101,7 +101,9 @@ export class ActivitiesService {
       filter.$text = { $search: search, $caseSensitive: false };
     }
 
-    const sortBy: { [key: string]: SortOrder } = { [orderBy]: orderDirection === 'asc' ? 1 : -1 };
+    const sortBy: { [key: string]: SortOrder } = {
+      [orderBy]: orderDirection === 'asc' ? 1 : -1,
+    };
     const count = await this.activitiesModel.countDocuments(filter);
     const result = await this.activitiesModel
       .find(filter)
