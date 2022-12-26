@@ -1,6 +1,9 @@
-import { NestFactory } from '@nestjs/core';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { NestFactory } from '@nestjs/core';
+import { useContainer } from 'class-validator';
+import compress from '@fastify/compress';
+import helmet from '@fastify/helmet';
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -10,35 +13,23 @@ import {
   SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-import compress from 'fastify-compress';
-import helmet from 'fastify-helmet';
 
 import { AppModule } from './app.module';
 import { Env } from './commons/environment/env';
 import { LoggingInterceptor } from './commons/interceptors/logging.interceptor';
+import { AppLogger } from './commons/providers/log/app-logger';
 
 const bootstrap = async (): Promise<void> => {
-  const fastifyAdapter = new FastifyAdapter({
-    logger: false,
-    maxParamLength: 1000,
-    bodyLimit: 12485760, // 10MB
-  });
-
-  fastifyAdapter.register(helmet, {
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: [`'self'`],
-        styleSrc: [`'self'`, `'unsafe-inline'`],
-        imgSrc: [`'self'`, 'data:', 'validator.swagger.io'],
-        scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
-      },
-    },
-  });
-  fastifyAdapter.register(compress);
+  const logger = new AppLogger();
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    fastifyAdapter,
+    new FastifyAdapter({
+      logger: false,
+      maxParamLength: 1000,
+      bodyLimit: 12485760, // 10MB
+    }),
+    { logger }
   );
 
   app.enableCors({
@@ -52,12 +43,19 @@ const bootstrap = async (): Promise<void> => {
 
   app.useGlobalInterceptors(new LoggingInterceptor());
 
+  await app.register(helmet, {
+    contentSecurityPolicy: false,
+  });
+
+  await app.register(compress);
+
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
   const swaggerDocumentBuilder = new DocumentBuilder()
-    .addBearerAuth()
     .setTitle(Env.SWAGGER_TITLE)
     .setDescription(Env.SWAGGER_DESCRIPTION)
     .setVersion(Env.APPLICATION_VERSION)
-    .setContact('ActEdu', 'http://www.actedu.com.br', 'contato@actedu.com.br');
+    .setContact('Atividade Escolar', 'https://www.atividadeescolar.com.br/', 'pedropereirahg@gmail.com');
 
   Env.SWAGGER_SERVER.map((swaggerServer) =>
     swaggerDocumentBuilder.addServer(swaggerServer),
@@ -78,8 +76,8 @@ const bootstrap = async (): Promise<void> => {
 
   await app
     .listen(Env.APPLICATION_PORT, '0.0.0.0')
-    .then(() => Logger.log(`API Listen on ${Env.APPLICATION_PORT}`))
-    .catch((error: any) => Logger.error(error.message));
+    .then(() => logger.log(`API Listen on ${Env.APPLICATION_PORT}`))
+    .catch((error: any) => logger.error(error));
 };
 
 bootstrap();

@@ -39,7 +39,11 @@ export class InfraLogger extends LogProvider {
     level: ILogLevel = ILogLevel.LOG,
     stacktrace?: LogProvider.Input,
   ): LogProvider.Result {
-    const printLog = this.formatLog(message, level, stacktrace);
+    let lvl = level;
+    if (lvl === ILogLevel.ALERT) {
+      lvl = ILogLevel.WARN;
+    }
+    const printLog = this.formatLog(message, lvl, stacktrace);
 
     this.logger.log(printLog);
   }
@@ -51,7 +55,7 @@ export class InfraLogger extends LogProvider {
   error(error: Error): LogProvider.Result {
     const doesNotAError = !(error instanceof Error);
     if (doesNotAError) {
-      this.log(error, ILogLevel.ALERT);
+      this.log(error, ILogLevel.WARN);
       return;
     }
     this.log(error.message, ILogLevel.ERROR, error.stack);
@@ -70,6 +74,6 @@ export class InfraLogger extends LogProvider {
   }
 
   alert(message: LogProvider.Input): LogProvider.Result {
-    this.log(message, ILogLevel.ALERT);
+    this.log(message, ILogLevel.WARN);
   }
 }

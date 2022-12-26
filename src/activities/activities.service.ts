@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, SortOrder } from 'mongoose';
 import { v4 as uuidV4 } from 'uuid';
 
 import {
@@ -17,7 +17,8 @@ export class ActivitiesService {
     private activitiesModel: Model<ActivitiesDocument>,
   ) {}
 
-  async create(data: Partial<Activity>): Promise<Activity> {
+  // async create(data: Partial<Activity>): Promise<Activity> {
+  async create(data: Partial<Activity>): Promise<any> {
     const dataToSave = new this.activitiesModel({
       id: uuidV4(),
       ...data,
@@ -85,6 +86,12 @@ export class ActivitiesService {
     orderBy,
     orderDirection,
     search,
+  }: {
+    page: number;
+    pageSize: number;
+    orderBy: string;
+    orderDirection: string;
+    search: string;
   }): Promise<[Activity[], number]> {
     const filter: Record<string, any> = {
       active: true,
@@ -94,7 +101,7 @@ export class ActivitiesService {
       filter.$text = { $search: search, $caseSensitive: false };
     }
 
-    const sortBy = { [orderBy]: orderDirection === 'asc' ? 1 : -1 };
+    const sortBy: { [key: string]: SortOrder } = { [orderBy]: orderDirection === 'asc' ? 1 : -1 };
     const count = await this.activitiesModel.countDocuments(filter);
     const result = await this.activitiesModel
       .find(filter)

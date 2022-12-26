@@ -31,8 +31,9 @@ export class ActivitiesEntity extends Document implements Activity {
   options?: Options[];
 
   @Prop({
-    type: ActivityTypesEnum,
-    enum: Object.values(ActivityTypesEnum),
+    // type: ActivityTypesEnum,
+    // enum: Object.values(ActivityTypesEnum),
+    type: String,
     default: ActivityTypesEnum.essay,
     required: true,
   })

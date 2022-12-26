@@ -14,7 +14,6 @@ import { ActivitiesModule } from './activities/activities.module';
     MongooseModule.forRoot(Env.DATABASE_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useCreateIndex: true,
     }),
     ActivitiesModule,
   ],

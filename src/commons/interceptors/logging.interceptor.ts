@@ -1,7 +1,7 @@
 import { ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import {
-  TransformInterceptor,
   RequestLoggerInterceptor,
+  TransformInterceptor,
 } from '../helpers/logger';
 import { catchError, map } from 'rxjs';
 
@@ -16,8 +16,8 @@ export class LoggingInterceptor implements NestInterceptor {
     const transformInterceptor = new TransformInterceptor();
 
     return handler.pipe(
-      map((data) => transformInterceptor.transformResponse(data, response)),
-      catchError((error) => transformInterceptor.transformError(error) as any),
+      map(data => transformInterceptor.transformResponse(data, response)),
+      catchError(error => transformInterceptor.transformError(error) as any),
     );
   }
 }

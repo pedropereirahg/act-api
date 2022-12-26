@@ -1,3 +1,4 @@
 {
-    "parameterHints.hintingType": "variableOnly"
+  "parameterHints.hintingType": "variableOnly",
+  "typescript.preferences.importModuleSpecifier": "relative"
 }
