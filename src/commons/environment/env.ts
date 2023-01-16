@@ -6,8 +6,8 @@ export abstract class Env {
     process.env.NODE_ENV || 'development';
 
   public static readonly APPLICATION_PORT: number =
-    parseInt(process.env.PORT, 10) ||
-    parseInt(process.env.APPLICATION_PORT, 10);
+    parseInt(String(process.env.PORT), 10) ||
+    parseInt(String(process.env.APPLICATION_PORT), 10);
 
   public static readonly APPLICATION_VERSION: string =
     process.env.APPLICATION_VERSION;

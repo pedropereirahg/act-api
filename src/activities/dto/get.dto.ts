@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { classToClass, plainToClass } from 'class-transformer';
+import { instanceToInstance, plainToClass } from 'class-transformer';
 import { IsDateString } from 'class-validator';
 
 import { CreateDto } from './create.dto';
@@ -36,6 +36,6 @@ export class GetDto extends CreateDto {
       excludePrefixes: ['_id', '__v'],
     });
 
-    return classToClass(resultQueryDto);
+    return instanceToInstance(resultQueryDto);
   }
 }

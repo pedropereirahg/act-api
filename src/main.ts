@@ -15,8 +15,8 @@ import {
 } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
-import { Env } from './commons/environment/env';
 import { LoggingInterceptor } from './commons/interceptors/logging.interceptor';
+import { Env } from './commons/environment/env';
 import { AppLogger } from './commons/providers/log/app-logger';
 
 const bootstrap = async (): Promise<void> => {
@@ -78,10 +78,15 @@ const bootstrap = async (): Promise<void> => {
 
   SwaggerModule.setup(Env.SWAGGER_DOCS, app, swaggerDocument);
 
-  await app
-    .listen(Env.APPLICATION_PORT, '0.0.0.0')
-    .then(() => logger.log(`API Listen on ${Env.APPLICATION_PORT}`))
-    .catch((error: any) => logger.error(error));
+  try {
+    await app.startAllMicroservices();
+
+    await app
+      .listen(Env.APPLICATION_PORT, '0.0.0.0')
+      .then(() => logger.log(`API Listen on ${Env.APPLICATION_PORT}`));
+  } catch (error) {
+    logger.error(error);
+  }
 };
 
 bootstrap();
